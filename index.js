@@ -37,6 +37,9 @@ app.use(errorhandler());
 mongoose.connect(
   "mongodb://evanfung:password@ds151809.mlab.com:51809/whatsapp-clone"
 );
+mongoose.connection
+  .once("open", () => console.log("Connected to MongoLab instance."))
+  .on("error", error => console.log("Error connecting to MongoLab:", error));
 mongoose.set("debug", true);
 
 app.listen(PORT, () =>
