@@ -42,6 +42,11 @@ mongoose.connection
   .on("error", error => console.log("Error connecting to MongoLab:", error));
 mongoose.set("debug", true);
 
+require("./models/User");
+require("./config/passport");
+
+app.use(require("./routes"));
+
 app.listen(PORT, () =>
   console.log(`Server is now running on http://localhost:${PORT}`)
 );
