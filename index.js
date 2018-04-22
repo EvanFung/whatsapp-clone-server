@@ -16,7 +16,7 @@ app.use(cors());
 
 //normal express config defaults
 app.use(require("morgan")("dev"));
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.use(require("method-override")());
@@ -33,6 +33,7 @@ app.use(
 
 app.use(errorhandler());
 
+// mongoose.Promise = global.Promise;
 //for convinience we using the mlab uri
 mongoose.connect(
   "mongodb://evanfung:password@ds151809.mlab.com:51809/whatsapp-clone"
@@ -42,10 +43,27 @@ mongoose.connection
   .on("error", error => console.log("Error connecting to MongoLab:", error));
 mongoose.set("debug", true);
 
-require("./models/User");
-require("./config/passport");
+import "./models/User";
+import "./config/passport";
+import routes from "./routes";
+app.use(routes);
 
-app.use(require("./routes"));
+/// catch 404 and forward to error handler
+app.use(function(req, res, next) {
+  var err = new Error("Not Found");
+  err.status = 404;
+  next(err);
+});
+
+app.use(function(err, req, res, next) {
+  res.status(err.status || 500);
+  res.json({
+    errors: {
+      message: err.message,
+      error: {}
+    }
+  });
+});
 
 app.listen(PORT, () =>
   console.log(`Server is now running on http://localhost:${PORT}`)

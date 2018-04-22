@@ -57,7 +57,7 @@ UserSchema.methods.generateJWT = function() {
       username: this.username,
       exp: parseInt(exp.getTime() / 1000)
     },
-    secret
+    "evanfung"
   );
 };
 
